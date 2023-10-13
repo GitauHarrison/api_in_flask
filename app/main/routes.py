@@ -27,7 +27,7 @@ def index():
         flash('Your post is live')
         return redirect(url_for('main.index'))
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.order_by(Post.created_at.desc()).paginate(
+    posts = Post.query.order_by(Post.timestamp.desc()).paginate(
         page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
     next_url = url_for('main.index', page=posts.next_num) \
         if posts.has_next else None
@@ -47,7 +47,7 @@ def index():
 def profile(username):
     user = User.query.filter_by(username=username).first()
     page = request.args.get('page', 1, type=int)
-    posts = user.posts.order_by(Post.created_at.desc()).paginate(
+    posts = user.posts.order_by(Post.timestamp.desc()).paginate(
         page=page, per_page=current_app.config['POSTS_PER_PAGE'], error_out=False)
     next_url = url_for('main.profile', username=user.username, page=posts.next_num) \
         if posts.has_next else None
