@@ -112,6 +112,6 @@ class Post(PaginatedAPIMixin, db.Model):
 
     # From Python representation to object
     def from_dict(self, data):
-        for field in ["tite", "body", "author_id"]:
+        for field in ["title", "body", "author_id"]:
             if field in data:
                 setattr(self, field, data[field])
