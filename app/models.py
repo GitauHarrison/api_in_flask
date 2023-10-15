@@ -66,7 +66,9 @@ class User(PaginatedAPIMixin, UserMixin, db.Model):
             'post_count': self.posts.count(),
             '_links': {
                 'self': url_for('api.get_user', id=self.id),
-                'avatar': self.avatar(128)
+                'avatar': self.avatar(128),
+                # Get all posts by an author
+                'my_posts': url_for('api.get_posts_by_author', id=self.id )
             }
         }
         if include_email:
@@ -101,11 +103,13 @@ class Post(PaginatedAPIMixin, db.Model):
             "author": {
                 "id": self.author.id,
                 "username": self.author.username,
-                "about_author": self.author.about_me
+                "about_author": self.author.about_me,
+                'post_count': self.author.posts.count()
             },
             "_links": {
                 "to_this_post": url_for('api.get_post', id=self.id),
-                "to_post_author": url_for('api.get_user', username=self.author.username)
+                "to_post_author": url_for('api.get_user', id=self.author.id),
+                "to_other_posts_by_author": url_for('api.get_posts_by_author', id=self.author.id)
             }
         }
         return data
